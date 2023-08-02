@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Table } from '@finos/perspective';
 import { ServerRespond } from './DataStreamer';
-import { DataManipulator } from './DataManipulator';
+import { DataManipulator, Row } from './DataManipulator';
 import './Graph.css';
 
 interface IProps {
@@ -23,9 +23,10 @@ class Graph extends Component<IProps, {}> {
     const elem = document.getElementsByTagName('perspective-viewer')[0] as unknown as PerspectiveViewerElement;
 
     const schema = {
-      stock: 'string',
-      top_ask_price: 'float',
-      top_bid_price: 'float',
+      ratio: 'float',
+      upper_bound: 'float',
+      lower_bound: 'float',
+      trigger_alert: 'float',
       timestamp: 'date',
     };
 
@@ -38,11 +39,12 @@ class Graph extends Component<IProps, {}> {
       elem.setAttribute('view', 'y_line');
       elem.setAttribute('column-pivots', '["stock"]');
       elem.setAttribute('row-pivots', '["timestamp"]');
-      elem.setAttribute('columns', '["top_ask_price"]');
+      elem.setAttribute('columns', '["ratio", "upper_bound", "lower_bound", "trigger_alert"]');
       elem.setAttribute('aggregates', JSON.stringify({
-        stock: 'distinctcount',
-        top_ask_price: 'avg',
-        top_bid_price: 'avg',
+        ratio: 'avg',
+        upper_bound: 'avg',
+        lower_bound: 'avg',
+        trigger_alert: 'avg',
         timestamp: 'distinct count',
       }));
     }
